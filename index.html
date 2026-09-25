@@ -122,6 +122,14 @@
     .emoji { flex: none; font-size: 31px; line-height: 1; }
     .menu-item strong { display: block; font-family: Georgia, serif; font-size: 20px; font-weight: 500; }
     .menu-item small { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; line-height: 1.35; }
+    .restaurant-grid { display: grid; gap: 12px; margin: 29px 0 0; }
+    .restaurant-choice { width: 100%; }
+    .restaurant-link { justify-self: end; margin: 7px 3px 0; color: var(--gold); font-size: 12px; }
+    .restaurant-link:hover { color: #ffe0a7; }
+    .step-actions { margin-top: 25px; }
+    .step-note { margin: 18px 0 0; color: #a78f91; font-size: 12px; line-height: 1.5; }
+    .back-button { display: inline-block; margin: 0 0 22px; padding: 0; border: 0; color: var(--gold); background: none; font-size: 13px; font-weight: 700; }
+    .back-button:hover { text-decoration: underline; }
     .rule { height: 1px; margin: 32px 0 25px; background: var(--line); }
     .prompt { margin: 0 0 17px; font-size: 14px; font-weight: 750; letter-spacing: .01em; }
     .buttons { display: flex; flex-wrap: wrap; align-items: stretch; gap: 11px; }
@@ -139,6 +147,8 @@
     .btn:hover { transform: translateY(-2px); border-color: rgba(255, 228, 209, .48); background: rgba(255, 255, 255, .09); }
     .btn-primary { border-color: var(--gold); color: #271819; background: var(--gold); }
     .btn-primary:hover { background: #ffe0a7; border-color: #ffe0a7; }
+    .btn:disabled { opacity: .5; cursor: not-allowed; }
+    .btn:disabled:hover { transform: none; background: var(--gold); border-color: var(--gold); }
     .status { min-height: 44px; margin: 18px 0 0; color: var(--gold); font-size: 14px; line-height: 1.5; }
     .fine-print { margin: 0; color: #a78f91; font-size: 12px; line-height: 1.5; }
     .outcome { display: none; }
@@ -184,26 +194,50 @@
     <div class="masthead"><span>A very important invitation</span><span class="seal">✦ Private dining proposal ✦</span></div>
     <main class="card" id="card">
       <div id="invitation">
-        <p class="eyebrow">Your presence is requested</p>
-        <h1>Will you go to <span class="accent">dinner</span> with me?</h1>
-        <p class="lead">I have prepared a compelling offer: great company, an excellent meal, and absolutely no presentation slides.</p>
-        <p class="menu-intro">Tap to pick your dinner lineup:</p>
-        <div class="menu" role="group" aria-label="Dinner menu choices">
-          <button class="menu-item" type="button" data-menu="Steak" aria-pressed="true"><span class="emoji" aria-hidden="true">🥩</span><span><strong>Steak</strong><small>Cooked exactly how you like it.</small></span></button>
-          <button class="menu-item" type="button" data-menu="Lobster" aria-pressed="true"><span class="emoji" aria-hidden="true">🦞</span><span><strong>Lobster</strong><small>Butter will be involved.</small></span></button>
-          <button class="menu-item" type="button" data-menu="Champagne" aria-pressed="false"><span class="emoji" aria-hidden="true">🥂</span><span><strong>Champagne</strong><small>A toast to excellent judgment.</small></span></button>
-          <button class="menu-item" type="button" data-menu="Margaritas" aria-pressed="false"><span class="emoji" aria-hidden="true">🍹</span><span><strong>Margaritas</strong><small>Salt rim? Your call.</small></span></button>
-          <button class="menu-item" type="button" data-menu="Truffle fries" aria-pressed="false"><span class="emoji" aria-hidden="true">🍟</span><span><strong>Truffle fries</strong><small>For sharing, allegedly.</small></span></button>
-          <button class="menu-item" type="button" data-menu="Chocolate cake" aria-pressed="false"><span class="emoji" aria-hidden="true">🍰</span><span><strong>Chocolate cake</strong><small>We can call it research.</small></span></button>
+        <div id="restaurantStep">
+          <p class="eyebrow">Your presence is requested</p>
+          <h1 id="restaurantTitle" tabindex="-1">I Remember You Saying <span class="accent">Steak and Lobster</span></h1>
+          <p class="lead">I took that information very seriously. First, pick our dinner spot around Temple.</p>
+          <div class="restaurant-grid" role="group" aria-label="Temple restaurant choices">
+            <div class="restaurant-option">
+              <button class="menu-item restaurant-choice" type="button" data-restaurant="Cheeves Bros Steakhouse" aria-pressed="false"><span class="emoji" aria-hidden="true">🥩</span><span><strong>Cheeves Bros Steakhouse</strong><small>Downtown Temple · classic steakhouse date night</small></span></button>
+              <a class="restaurant-link" href="https://cheeves.com/dinner/" target="_blank" rel="noopener noreferrer">View dinner menu ↗</a>
+            </div>
+            <div class="restaurant-option">
+              <button class="menu-item restaurant-choice" type="button" data-restaurant="LongHorn Steakhouse" aria-pressed="false"><span class="emoji" aria-hidden="true">🍽️</span><span><strong>LongHorn Steakhouse</strong><small>Temple · a classic steak and lobster pairing</small></span></button>
+              <a class="restaurant-link" href="https://www.longhornsteakhouse.com/locations/tx/temple/temple/5535" target="_blank" rel="noopener noreferrer">View restaurant menu ↗</a>
+            </div>
+            <div class="restaurant-option">
+              <button class="menu-item restaurant-choice" type="button" data-restaurant="Nami Texas" aria-pressed="false"><span class="emoji" aria-hidden="true">🔥</span><span><strong>Nami Texas</strong><small>Downtown Temple · hibachi steak and lobster</small></span></button>
+              <a class="restaurant-link" href="https://www.namitx.com/temple-menu/" target="_blank" rel="noopener noreferrer">View dinner menu ↗</a>
+            </div>
+          </div>
+          <div class="step-actions"><button class="btn btn-primary" id="continueBtn" type="button" disabled>Continue to the menu →</button></div>
         </div>
-        <div class="rule"></div>
-        <p class="prompt">So, what do you say?</p>
-        <div class="buttons">
-          <button class="btn btn-primary" id="yesBtn" type="button">Yes, it's a date ✨</button>
-          <button class="btn" id="noBtn" type="button">No, thanks</button>
+        <div id="menuStep" hidden>
+          <button class="back-button" id="backBtn" type="button">← Change restaurant</button>
+          <p class="eyebrow">Excellent choice</p>
+          <h2 id="menuTitle" tabindex="-1">Now for the <span class="accent">good part.</span></h2>
+          <p class="lead">We’ll start with <span id="selectedRestaurant"></span>. Build your dream dinner.</p>
+          <p class="menu-intro">Tap to pick your dinner lineup:</p>
+          <div class="menu" role="group" aria-label="Dinner menu choices">
+            <button class="menu-item" type="button" data-menu="Steak" aria-pressed="true"><span class="emoji" aria-hidden="true">🥩</span><span><strong>Steak</strong><small>Cooked exactly how you like it.</small></span></button>
+            <button class="menu-item" type="button" data-menu="Lobster" aria-pressed="true"><span class="emoji" aria-hidden="true">🦞</span><span><strong>Lobster</strong><small>Butter will be involved.</small></span></button>
+            <button class="menu-item" type="button" data-menu="Champagne" aria-pressed="false"><span class="emoji" aria-hidden="true">🥂</span><span><strong>Champagne</strong><small>A toast to excellent judgment.</small></span></button>
+            <button class="menu-item" type="button" data-menu="Margaritas" aria-pressed="false"><span class="emoji" aria-hidden="true">🍹</span><span><strong>Margaritas</strong><small>Salt rim? Your call.</small></span></button>
+            <button class="menu-item" type="button" data-menu="Truffle fries" aria-pressed="false"><span class="emoji" aria-hidden="true">🍟</span><span><strong>Truffle fries</strong><small>For sharing, allegedly.</small></span></button>
+            <button class="menu-item" type="button" data-menu="Chocolate cake" aria-pressed="false"><span class="emoji" aria-hidden="true">🍰</span><span><strong>Chocolate cake</strong><small>We can call it research.</small></span></button>
+          </div>
+          <p class="step-note">These are our dinner wishes; the restaurant’s menu gets the final say.</p>
+          <div class="rule"></div>
+          <p class="prompt">So, will you go to dinner with me?</p>
+          <div class="buttons">
+            <button class="btn btn-primary" id="yesBtn" type="button">Yes, it's a date ✨</button>
+            <button class="btn" id="noBtn" type="button">No, thanks</button>
+          </div>
+          <p class="status" id="status" role="status" aria-live="polite"></p>
+          <p class="fine-print">Date and time are negotiable. The steak and lobster are the main characters.</p>
         </div>
-        <p class="status" id="status" role="status" aria-live="polite"></p>
-        <p class="fine-print">Date and place are negotiable. The steak and lobster are the main characters.</p>
       </div>
       <section class="outcome" id="yesOutcome" aria-labelledby="yesTitle">
         <p class="eyebrow">A truly excellent decision</p>
@@ -240,7 +274,35 @@
     const status = document.getElementById('status');
     const confetti = document.getElementById('confetti');
     const menuChoices = [...document.querySelectorAll('[data-menu]')];
+    const restaurantChoices = [...document.querySelectorAll('[data-restaurant]')];
+    const restaurantStep = document.getElementById('restaurantStep');
+    const menuStep = document.getElementById('menuStep');
+    const continueBtn = document.getElementById('continueBtn');
+    let restaurant = '';
     let noAttempts = 0;
+
+    restaurantChoices.forEach(choice => choice.addEventListener('click', () => {
+      restaurant = choice.dataset.restaurant;
+      restaurantChoices.forEach(option => option.setAttribute('aria-pressed', option === choice ? 'true' : 'false'));
+      continueBtn.disabled = false;
+    }));
+
+    continueBtn.addEventListener('click', () => {
+      if (!restaurant) return;
+      document.getElementById('selectedRestaurant').textContent = restaurant;
+      restaurantStep.hidden = true;
+      menuStep.hidden = false;
+      document.getElementById('menuTitle').focus();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    document.getElementById('backBtn').addEventListener('click', () => {
+      menuStep.hidden = true;
+      restaurantStep.hidden = false;
+      resetNoButton();
+      document.getElementById('restaurantTitle').focus();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
 
     menuChoices.forEach(choice => choice.addEventListener('click', () => {
       choice.setAttribute('aria-pressed', choice.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
@@ -255,6 +317,15 @@
       if (items.length < 2) return items[0] || 'dinner';
       if (items.length === 2) return `${items[0]} and ${items[1]}`;
       return `${items.slice(0, -1).join(', ')}, and ${items.at(-1)}`;
+    }
+
+    function resetNoButton() {
+      noAttempts = 0;
+      noBtn.textContent = 'No, thanks';
+      noBtn.style.translate = '';
+      delete noBtn.dataset.dodgeX;
+      noBtn.parentElement.classList.remove('dodging');
+      status.textContent = '';
     }
 
     function moveNoButton() {
@@ -297,8 +368,8 @@
     document.getElementById('yesBtn').addEventListener('click', () => {
       const choices = selectedMenu();
       document.getElementById('yesResponse').textContent = choices.length
-        ? `${menuPhrase(choices)}. You and me. I’ll bring the appetite; we can pick the night together.`
-        : 'You and me. We can settle the menu together when we pick the night.';
+        ? `${menuPhrase(choices)} at ${restaurant}. You and me. I’ll bring the appetite; we can pick the night together.`
+        : `Dinner at ${restaurant}. You and me. We can settle the menu together when we pick the night.`;
       showOutcome(yesOutcome);
       celebrate();
     });
@@ -327,17 +398,17 @@
       yesOutcome.classList.remove('is-visible');
       noOutcome.classList.remove('is-visible');
       invitation.hidden = false;
-      noAttempts = 0;
-      noBtn.textContent = 'No, thanks';
-      noBtn.style.translate = '';
-      delete noBtn.dataset.dodgeX;
-      noBtn.parentElement.classList.remove('dodging');
+      restaurantStep.hidden = false;
+      menuStep.hidden = true;
+      restaurant = '';
+      restaurantChoices.forEach(choice => choice.setAttribute('aria-pressed', 'false'));
+      continueBtn.disabled = true;
+      resetNoButton();
       menuChoices.forEach((choice, index) => choice.setAttribute('aria-pressed', index < 2 ? 'true' : 'false'));
-      status.textContent = '';
       document.getElementById('yesNotice').textContent = 'Your answer stays on this page until you send it.';
       document.getElementById('noNotice').textContent = 'Your answer stays on this page until you send it.';
       confetti.replaceChildren();
-      document.getElementById('yesBtn').focus();
+      document.getElementById('restaurantTitle').focus();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }));
 
@@ -353,7 +424,7 @@
     document.getElementById('copyYesBtn').addEventListener('click', () => {
       const choices = selectedMenu();
       copyReply(
-        `Yes! ${menuPhrase(choices)} ${choices.length > 1 ? 'sound' : 'sounds'} amazing. Let’s pick a night. 🥂`,
+        `Yes! Let’s do ${menuPhrase(choices).toLowerCase()} at ${restaurant}. Let’s pick a night. 🥂`,
         document.getElementById('yesNotice')
       );
     });
