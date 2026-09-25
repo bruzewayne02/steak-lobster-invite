@@ -323,7 +323,6 @@
       noAttempts = 0;
       noBtn.textContent = 'No, thanks';
       noBtn.style.translate = '';
-      delete noBtn.dataset.dodgeX;
       noBtn.parentElement.classList.remove('dodging');
       status.textContent = '';
     }
@@ -332,7 +331,7 @@
       const mobile = window.matchMedia('(max-width: 540px)').matches;
       const rect = noBtn.getBoundingClientRect();
       const cardRect = card.getBoundingClientRect();
-      const previousX = Number(noBtn.dataset.dodgeX || 0);
+      const previousX = parseFloat(window.getComputedStyle(noBtn).translate) || 0;
       const baseLeft = rect.left - previousX;
       const baseRight = rect.right - previousX;
       const desiredX = mobile ? 0 : [-210, 245, -185][noAttempts - 1];
@@ -342,7 +341,6 @@
       );
       const y = mobile ? [110, 155, 75][noAttempts - 1] : [115, 55, 145][noAttempts - 1];
       noBtn.style.translate = `${x}px ${y}px`;
-      noBtn.dataset.dodgeX = x;
     }
 
     function showOutcome(outcome) {
