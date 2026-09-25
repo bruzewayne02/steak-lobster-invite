@@ -196,20 +196,20 @@
       <div id="invitation">
         <div id="restaurantStep">
           <p class="eyebrow">Your presence is requested</p>
-          <h1 id="restaurantTitle" tabindex="-1">I Remember You Saying <span class="accent">Steak and Lobster</span></h1>
-          <p class="lead">I took that information very seriously. First, pick our dinner spot around Temple.</p>
-          <div class="restaurant-grid" role="group" aria-label="Temple restaurant choices">
+          <h1 id="restaurantTitle" tabindex="-1">Something Was Said About <span class="accent">Steak Lobster</span></h1>
+          <p class="lead">I took that information very seriously. First, pick the dinner spot.</p>
+          <div class="restaurant-grid" role="group" aria-label="Harker Heights restaurant choices">
             <div class="restaurant-option">
-              <button class="menu-item restaurant-choice" type="button" data-restaurant="Cheeves Bros Steakhouse" aria-pressed="false"><span class="emoji" aria-hidden="true">🥩</span><span><strong>Cheeves Bros Steakhouse</strong><small>Downtown Temple · classic steakhouse date night</small></span></button>
-              <a class="restaurant-link" href="https://cheeves.com/dinner/" target="_blank" rel="noopener noreferrer">View dinner menu ↗</a>
+              <button class="menu-item restaurant-choice" type="button" data-restaurant="LongHorn Steakhouse" aria-pressed="false"><span class="emoji" aria-hidden="true">🥩</span><span><strong>LongHorn Steakhouse</strong><small>Harker Heights · steakhouse classics</small></span></button>
+              <a class="restaurant-link" href="https://www.longhornsteakhouse.com/locations" target="_blank" rel="noopener noreferrer">View restaurant menu ↗</a>
             </div>
             <div class="restaurant-option">
-              <button class="menu-item restaurant-choice" type="button" data-restaurant="LongHorn Steakhouse" aria-pressed="false"><span class="emoji" aria-hidden="true">🍽️</span><span><strong>LongHorn Steakhouse</strong><small>Temple · a classic steak and lobster pairing</small></span></button>
-              <a class="restaurant-link" href="https://www.longhornsteakhouse.com/locations/tx/temple/temple/5535" target="_blank" rel="noopener noreferrer">View restaurant menu ↗</a>
+              <button class="menu-item restaurant-choice" type="button" data-restaurant="The Shack Caribbean Seafood and Grill" aria-pressed="false"><span class="emoji" aria-hidden="true">🦞</span><span><strong>The Shack Caribbean Seafood and Grill</strong><small>Harker Heights · steak and lobster mofongo</small></span></button>
+              <a class="restaurant-link" href="https://www.theshackcaribbeangrill.com/menu" target="_blank" rel="noopener noreferrer">View dinner menu ↗</a>
             </div>
             <div class="restaurant-option">
-              <button class="menu-item restaurant-choice" type="button" data-restaurant="Nami Texas" aria-pressed="false"><span class="emoji" aria-hidden="true">🔥</span><span><strong>Nami Texas</strong><small>Downtown Temple · hibachi steak and lobster</small></span></button>
-              <a class="restaurant-link" href="https://www.namitx.com/temple-menu/" target="_blank" rel="noopener noreferrer">View dinner menu ↗</a>
+              <button class="menu-item restaurant-choice" type="button" data-restaurant="Cajun Crab &amp; Shrimp Bar &amp; Grill" aria-pressed="false"><span class="emoji" aria-hidden="true">🦀</span><span><strong>Cajun Crab &amp; Shrimp Bar &amp; Grill</strong><small>Harker Heights · Cajun seafood dinner</small></span></button>
+              <a class="restaurant-link" href="https://ordercajuncrabsshrimp2.com/menu/harker-heights" target="_blank" rel="noopener noreferrer">View dinner menu ↗</a>
             </div>
           </div>
           <div class="step-actions"><button class="btn btn-primary" id="continueBtn" type="button" disabled>Continue to the menu →</button></div>
@@ -230,9 +230,8 @@
           </div>
           <p class="step-note">These are our dinner wishes; the restaurant’s menu gets the final say.</p>
           <div class="rule"></div>
-          <p class="prompt">So, will you go to dinner with me?</p>
           <div class="buttons">
-            <button class="btn btn-primary" id="yesBtn" type="button">Yes, it's a date ✨</button>
+            <button class="btn btn-primary" id="yesBtn" type="button">Let's do it</button>
             <button class="btn" id="noBtn" type="button">No, thanks</button>
           </div>
           <p class="status" id="status" role="status" aria-live="polite"></p>
@@ -242,8 +241,7 @@
       <section class="outcome" id="yesOutcome" aria-labelledby="yesTitle">
         <p class="eyebrow">A truly excellent decision</p>
         <span class="icon-big" aria-hidden="true">🥂</span>
-        <h2 id="yesTitle" tabindex="-1">It’s a <span class="accent">date.</span></h2>
-        <p class="response" id="yesResponse">Steak. Lobster. You and me. I’ll bring the appetite; we can pick the night together.</p>
+        <h2 id="yesTitle" tabindex="-1">Sounds like a <span class="accent">good time.</span></h2>
         <div class="buttons">
           <button class="btn btn-primary" id="copyYesBtn" type="button">Copy my yes to send</button>
           <button class="btn" data-restart type="button">Start over</button>
@@ -364,10 +362,6 @@
     }
 
     document.getElementById('yesBtn').addEventListener('click', () => {
-      const choices = selectedMenu();
-      document.getElementById('yesResponse').textContent = choices.length
-        ? `${menuPhrase(choices)} at ${restaurant}. You and me. I’ll bring the appetite; we can pick the night together.`
-        : `Dinner at ${restaurant}. You and me. We can settle the menu together when we pick the night.`;
       showOutcome(yesOutcome);
       celebrate();
     });
