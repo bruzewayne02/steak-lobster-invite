@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#160c12">
+  <title>A Very Important Dinner Invitation</title>
+  <meta name="description" content="An extremely serious invitation to steak and lobster dinner.">
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #fff7ef;
+      --muted: #cbbab6;
+      --gold: #f7cf85;
+      --rose: #e9878e;
+      --line: rgba(255, 228, 209, .18);
+      --surface: rgba(37, 21, 29, .92);
+    }
+    * { box-sizing: border-box; }
+    html { min-width: 320px; }
+    body {
+      min-width: 320px;
+      min-height: 100vh;
+      min-height: 100svh;
+      margin: 0;
+      padding: clamp(16px, 4vw, 40px);
+      display: grid;
+      place-items: center;
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 8% 6%, rgba(177, 56, 73, .25), transparent 32rem),
+        radial-gradient(circle at 90% 90%, rgba(236, 155, 77, .15), transparent 34rem),
+        #160c12;
+    }
+    button { font: inherit; cursor: pointer; }
+    button:focus-visible { outline: 3px solid var(--gold); outline-offset: 4px; }
+    .shell { width: min(100%, 740px); }
+    .masthead, .footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 4px;
+      color: #bca4a4;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .17em;
+      text-transform: uppercase;
+    }
+    .masthead { margin-bottom: 18px; }
+    .seal { color: var(--gold); }
+    .card {
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+      padding: clamp(28px, 7vw, 58px);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: linear-gradient(150deg, rgba(60, 31, 43, .96), var(--surface) 50%, rgba(29, 19, 27, .98));
+      box-shadow: 0 28px 90px rgba(0, 0, 0, .36);
+    }
+    .card::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: -190px -220px auto auto;
+      width: 420px;
+      height: 420px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(231, 129, 118, .20), transparent 68%);
+      pointer-events: none;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0 0 18px;
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { content: ""; width: 20px; height: 1px; background: currentColor; }
+    h1, h2 { font-family: Georgia, "Times New Roman", serif; font-weight: 500; letter-spacing: -.045em; }
+    h1 { max-width: 610px; margin: 0; font-size: clamp(43px, 8.5vw, 76px); line-height: 1.02; }
+    h2 { margin: 0 0 16px; font-size: clamp(43px, 8vw, 70px); line-height: 1.02; }
+    .accent { color: var(--gold); font-style: italic; }
+    .lead { max-width: 520px; margin: 21px 0 0; color: var(--muted); font-size: clamp(16px, 2.6vw, 19px); line-height: 1.6; }
+    .menu {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 32px 0 0;
+    }
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      min-width: 0;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      background: rgba(255, 255, 255, .035);
+    }
+    .emoji { flex: none; font-size: 31px; line-height: 1; }
+    .menu-item strong { display: block; font-family: Georgia, serif; font-size: 20px; font-weight: 500; }
+    .menu-item small { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; line-height: 1.35; }
+    .rule { height: 1px; margin: 32px 0 25px; background: var(--line); }
+    .prompt { margin: 0 0 17px; font-size: 14px; font-weight: 750; letter-spacing: .01em; }
+    .buttons { display: flex; flex-wrap: wrap; align-items: stretch; gap: 11px; }
+    .btn {
+      min-height: 52px;
+      padding: 12px 19px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      color: var(--ink);
+      background: rgba(255, 255, 255, .055);
+      font-weight: 750;
+      transition: transform .18s ease, background .18s ease, border-color .18s ease;
+    }
+    .btn:hover { transform: translateY(-2px); border-color: rgba(255, 228, 209, .48); background: rgba(255, 255, 255, .09); }
+    .btn-primary { border-color: var(--gold); color: #271819; background: var(--gold); }
+    .btn-primary:hover { background: #ffe0a7; border-color: #ffe0a7; }
+    .status { min-height: 44px; margin: 18px 0 0; color: var(--gold); font-size: 14px; line-height: 1.5; }
+    .fine-print { margin: 0; color: #a78f91; font-size: 12px; line-height: 1.5; }
+    .outcome { display: none; }
+    .outcome.is-visible { display: block; }
+    .icon-big { display: block; margin: 4px 0 21px; font-size: 62px; line-height: 1; }
+    .response { max-width: 510px; margin: 0 0 24px; color: var(--muted); font-size: 18px; line-height: 1.6; }
+    .notice { margin: 17px 0 0; color: #a78f91; font-size: 12px; line-height: 1.5; }
+    .footer { margin-top: 18px; font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: none; }
+    .footer span:last-child { color: var(--gold); }
+    .confetti { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+    .confetti i {
+      position: absolute;
+      top: -24px;
+      width: 8px;
+      height: 15px;
+      border-radius: 2px;
+      opacity: 0;
+      animation: fall 2.7s ease-in forwards;
+    }
+    @keyframes fall {
+      0% { transform: translateY(-15px) rotate(0deg); opacity: 0; }
+      12% { opacity: 1; }
+      100% { transform: translateY(720px) rotate(630deg); opacity: 0; }
+    }
+    @media (max-width: 540px) {
+      .card { border-radius: 22px; }
+      .menu { grid-template-columns: 1fr; gap: 9px; margin-top: 24px; }
+      .menu-item { padding: 12px 14px; }
+      .rule { margin: 25px 0 22px; }
+      .buttons { display: grid; grid-template-columns: 1fr; }
+      .btn { width: 100%; }
+      .masthead { font-size: 10px; letter-spacing: .08em; }
+      .footer { align-items: flex-start; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="masthead"><span>A very important invitation</span><span class="seal">✦ Private dining proposal ✦</span></div>
+    <main class="card" id="card">
+      <div id="invitation">
+        <p class="eyebrow">Your presence is requested</p>
+        <h1>Will you go to <span class="accent">dinner</span> with me?</h1>
+        <p class="lead">I have prepared a compelling offer: great company, an excellent meal, and absolutely no presentation slides.</p>
+        <div class="menu" aria-label="Proposed dinner menu">
+          <div class="menu-item"><span class="emoji" aria-hidden="true">🥩</span><span><strong>Steak</strong><small>Cooked exactly how you like it.</small></span></div>
+          <div class="menu-item"><span class="emoji" aria-hidden="true">🦞</span><span><strong>Lobster</strong><small>Butter will be involved.</small></span></div>
+        </div>
+        <div class="rule"></div>
+        <p class="prompt">So, what do you say?</p>
+        <div class="buttons">
+          <button class="btn btn-primary" id="yesBtn" type="button">Yes, it's a date ✨</button>
+          <button class="btn" id="noBtn" type="button">No, thanks</button>
+        </div>
+        <p class="status" id="status" role="status" aria-live="polite"></p>
+        <p class="fine-print">Date and place are negotiable. The steak and lobster are the main characters.</p>
+      </div>
+      <section class="outcome" id="yesOutcome" aria-labelledby="yesTitle">
+        <p class="eyebrow">A truly excellent decision</p>
+        <span class="icon-big" aria-hidden="true">🥂</span>
+        <h2 id="yesTitle" tabindex="-1">It’s a <span class="accent">date.</span></h2>
+        <p class="response">Steak. Lobster. You and me. I’ll bring the appetite; we can pick the night together.</p>
+        <div class="buttons">
+          <button class="btn btn-primary" id="copyYesBtn" type="button">Copy my yes to send</button>
+          <button class="btn" data-restart type="button">Start over</button>
+        </div>
+        <p class="notice" id="yesNotice" role="status" aria-live="polite">Your answer stays on this page until you send it.</p>
+      </section>
+      <section class="outcome" id="noOutcome" aria-labelledby="noTitle">
+        <p class="eyebrow">Decision respectfully received</p>
+        <span class="icon-big" aria-hidden="true">🦞</span>
+        <h2 id="noTitle" tabindex="-1">Fair <span class="accent">enough.</span></h2>
+        <p class="response">The lobster and I respect your decision. It is being very mature about this.</p>
+        <div class="buttons">
+          <button class="btn btn-primary" id="copyNoBtn" type="button">Copy my reply to send</button>
+          <button class="btn" data-restart type="button">Start over</button>
+        </div>
+        <p class="notice" id="noNotice" role="status" aria-live="polite">Your answer stays on this page until you send it.</p>
+      </section>
+      <div class="confetti" id="confetti" aria-hidden="true"></div>
+    </main>
+    <div class="footer"><span>Made with excellent intentions and questionable restraint.</span><span>Steak + lobster + you?</span></div>
+  </div>
+  <script>
+    const invitation = document.getElementById('invitation');
+    const yesOutcome = document.getElementById('yesOutcome');
+    const noOutcome = document.getElementById('noOutcome');
+    const noBtn = document.getElementById('noBtn');
+    const status = document.getElementById('status');
+    const confetti = document.getElementById('confetti');
+    let noAttempts = 0;
+
+    function showOutcome(outcome) {
+      invitation.hidden = true;
+      outcome.classList.add('is-visible');
+      outcome.querySelector('h2').focus();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function celebrate() {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const colors = ['#f7cf85', '#e9878e', '#fff7ef', '#bd828e'];
+      for (let i = 0; i < 28; i++) {
+        const piece = document.createElement('i');
+        piece.style.left = `${(i * 37 + 11) % 100}%`;
+        piece.style.background = colors[i % colors.length];
+        piece.style.animationDelay = `${(i % 7) * 0.09}s`;
+        confetti.appendChild(piece);
+      }
+      setTimeout(() => confetti.replaceChildren(), 3500);
+    }
+
+    document.getElementById('yesBtn').addEventListener('click', () => {
+      showOutcome(yesOutcome);
+      celebrate();
+    });
+
+    noBtn.addEventListener('click', () => {
+      noAttempts++;
+      if (noAttempts === 1) {
+        status.textContent = 'Before you decide: did you see the lobster part?';
+        noBtn.textContent = 'Yes. Still no.';
+      } else if (noAttempts === 2) {
+        status.textContent = 'The lobster has asked me to mention there will also be butter.';
+        noBtn.textContent = 'I remain unconvinced.';
+      } else if (noAttempts === 3) {
+        status.textContent = 'Final offer: dessert. After this, I promise to respect your answer.';
+        noBtn.textContent = 'No thanks, really.';
+      } else {
+        showOutcome(noOutcome);
+      }
+    });
+
+    document.querySelectorAll('[data-restart]').forEach(button => button.addEventListener('click', () => {
+      yesOutcome.classList.remove('is-visible');
+      noOutcome.classList.remove('is-visible');
+      invitation.hidden = false;
+      noAttempts = 0;
+      noBtn.textContent = 'No, thanks';
+      status.textContent = '';
+      document.getElementById('yesNotice').textContent = 'Your answer stays on this page until you send it.';
+      document.getElementById('noNotice').textContent = 'Your answer stays on this page until you send it.';
+      confetti.replaceChildren();
+      document.getElementById('yesBtn').focus();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }));
+
+    async function copyReply(text, notice) {
+      try {
+        await navigator.clipboard.writeText(text);
+        notice.textContent = 'Copied! Now send it to me 💌';
+      } catch {
+        notice.textContent = `Copy and send this: “${text}”`;
+      }
+    }
+
+    document.getElementById('copyYesBtn').addEventListener('click', () => copyReply(
+      'Yes! Steak and lobster dinner sounds amazing. Let’s pick a night. 🥩🦞',
+      document.getElementById('yesNotice')
+    ));
+    document.getElementById('copyNoBtn').addEventListener('click', () => copyReply(
+      'Thank you for the steak and lobster invitation, but I’ll pass. 🦞',
+      document.getElementById('noNotice')
+    ));
+  </script>
+</body>
+</html>
