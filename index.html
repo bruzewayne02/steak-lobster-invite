@@ -118,7 +118,7 @@
       color: var(--ink);
       background: rgba(255, 255, 255, .055);
       font-weight: 750;
-      transition: transform .18s ease, background .18s ease, border-color .18s ease;
+      transition: transform .18s ease, translate .22s ease, background .18s ease, border-color .18s ease;
     }
     .btn:hover { transform: translateY(-2px); border-color: rgba(255, 228, 209, .48); background: rgba(255, 255, 255, .09); }
     .btn-primary { border-color: var(--gold); color: #271819; background: var(--gold); }
@@ -153,6 +153,7 @@
       .menu-item { padding: 12px 14px; }
       .rule { margin: 25px 0 22px; }
       .buttons { display: grid; grid-template-columns: 1fr; }
+      .buttons.dodging { padding-bottom: 70px; }
       .btn { width: 100%; }
       .masthead { font-size: 10px; letter-spacing: .08em; }
       .footer { align-items: flex-start; }
@@ -214,9 +215,27 @@
     const yesOutcome = document.getElementById('yesOutcome');
     const noOutcome = document.getElementById('noOutcome');
     const noBtn = document.getElementById('noBtn');
+    const card = document.getElementById('card');
     const status = document.getElementById('status');
     const confetti = document.getElementById('confetti');
     let noAttempts = 0;
+
+    function moveNoButton() {
+      const mobile = window.matchMedia('(max-width: 540px)').matches;
+      const rect = noBtn.getBoundingClientRect();
+      const cardRect = card.getBoundingClientRect();
+      const previousX = Number(noBtn.dataset.dodgeX || 0);
+      const baseLeft = rect.left - previousX;
+      const baseRight = rect.right - previousX;
+      const desiredX = mobile ? 0 : [-110, 75, -150][noAttempts - 1];
+      const x = Math.min(
+        Math.max(desiredX, cardRect.left + 18 - baseLeft),
+        cardRect.right - 18 - baseRight
+      );
+      const y = mobile ? [36, 62, 22][noAttempts - 1] : 0;
+      noBtn.style.translate = `${x}px ${y}px`;
+      noBtn.dataset.dodgeX = x;
+    }
 
     function showOutcome(outcome) {
       invitation.hidden = true;
@@ -257,6 +276,10 @@
       } else {
         showOutcome(noOutcome);
       }
+      if (noAttempts < 4) {
+        noBtn.parentElement.classList.add('dodging');
+        moveNoButton();
+      }
     });
 
     document.querySelectorAll('[data-restart]').forEach(button => button.addEventListener('click', () => {
@@ -265,6 +288,9 @@
       invitation.hidden = false;
       noAttempts = 0;
       noBtn.textContent = 'No, thanks';
+      noBtn.style.translate = '';
+      delete noBtn.dataset.dodgeX;
+      noBtn.parentElement.classList.remove('dodging');
       status.textContent = '';
       document.getElementById('yesNotice').textContent = 'Your answer stays on this page until you send it.';
       document.getElementById('noNotice').textContent = 'Your answer stays on this page until you send it.';
