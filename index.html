@@ -92,8 +92,9 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
-      margin: 32px 0 0;
+      margin: 10px 0 0;
     }
+    .menu-intro { margin: 29px 0 0; color: var(--gold); font-size: 13px; font-weight: 750; }
     .menu-item {
       display: flex;
       align-items: center;
@@ -102,14 +103,21 @@
       padding: 16px;
       border: 1px solid var(--line);
       border-radius: 17px;
+      color: var(--ink);
       background: rgba(255, 255, 255, .035);
+      text-align: left;
+      transition: background .18s ease, border-color .18s ease;
     }
+    .menu-item:hover { border-color: rgba(255, 228, 209, .48); }
+    .menu-item[aria-pressed="true"] { border-color: var(--gold); background: rgba(247, 207, 133, .12); }
+    .menu-item[aria-pressed="true"]::after { content: "✓"; margin-left: auto; color: var(--gold); font-size: 20px; }
     .emoji { flex: none; font-size: 31px; line-height: 1; }
     .menu-item strong { display: block; font-family: Georgia, serif; font-size: 20px; font-weight: 500; }
     .menu-item small { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; line-height: 1.35; }
     .rule { height: 1px; margin: 32px 0 25px; background: var(--line); }
     .prompt { margin: 0 0 17px; font-size: 14px; font-weight: 750; letter-spacing: .01em; }
     .buttons { display: flex; flex-wrap: wrap; align-items: stretch; gap: 11px; }
+    .buttons.dodging { padding-bottom: 155px; }
     .btn {
       min-height: 52px;
       padding: 12px 19px;
@@ -149,11 +157,11 @@
     }
     @media (max-width: 540px) {
       .card { border-radius: 22px; }
-      .menu { grid-template-columns: 1fr; gap: 9px; margin-top: 24px; }
+      .menu { grid-template-columns: 1fr; gap: 9px; }
       .menu-item { padding: 12px 14px; }
       .rule { margin: 25px 0 22px; }
       .buttons { display: grid; grid-template-columns: 1fr; }
-      .buttons.dodging { padding-bottom: 70px; }
+      .buttons.dodging { padding-bottom: 170px; }
       .btn { width: 100%; }
       .masthead { font-size: 10px; letter-spacing: .08em; }
       .footer { align-items: flex-start; }
@@ -171,9 +179,14 @@
         <p class="eyebrow">Your presence is requested</p>
         <h1>Will you go to <span class="accent">dinner</span> with me?</h1>
         <p class="lead">I have prepared a compelling offer: great company, an excellent meal, and absolutely no presentation slides.</p>
-        <div class="menu" aria-label="Proposed dinner menu">
-          <div class="menu-item"><span class="emoji" aria-hidden="true">🥩</span><span><strong>Steak</strong><small>Cooked exactly how you like it.</small></span></div>
-          <div class="menu-item"><span class="emoji" aria-hidden="true">🦞</span><span><strong>Lobster</strong><small>Butter will be involved.</small></span></div>
+        <p class="menu-intro">Tap to pick your dinner lineup:</p>
+        <div class="menu" role="group" aria-label="Dinner menu choices">
+          <button class="menu-item" type="button" data-menu="Steak" aria-pressed="true"><span class="emoji" aria-hidden="true">🥩</span><span><strong>Steak</strong><small>Cooked exactly how you like it.</small></span></button>
+          <button class="menu-item" type="button" data-menu="Lobster" aria-pressed="true"><span class="emoji" aria-hidden="true">🦞</span><span><strong>Lobster</strong><small>Butter will be involved.</small></span></button>
+          <button class="menu-item" type="button" data-menu="Champagne" aria-pressed="false"><span class="emoji" aria-hidden="true">🥂</span><span><strong>Champagne</strong><small>A toast to excellent judgment.</small></span></button>
+          <button class="menu-item" type="button" data-menu="Margaritas" aria-pressed="false"><span class="emoji" aria-hidden="true">🍹</span><span><strong>Margaritas</strong><small>Salt rim? Your call.</small></span></button>
+          <button class="menu-item" type="button" data-menu="Truffle fries" aria-pressed="false"><span class="emoji" aria-hidden="true">🍟</span><span><strong>Truffle fries</strong><small>For sharing, allegedly.</small></span></button>
+          <button class="menu-item" type="button" data-menu="Chocolate cake" aria-pressed="false"><span class="emoji" aria-hidden="true">🍰</span><span><strong>Chocolate cake</strong><small>We can call it research.</small></span></button>
         </div>
         <div class="rule"></div>
         <p class="prompt">So, what do you say?</p>
@@ -188,7 +201,7 @@
         <p class="eyebrow">A truly excellent decision</p>
         <span class="icon-big" aria-hidden="true">🥂</span>
         <h2 id="yesTitle" tabindex="-1">It’s a <span class="accent">date.</span></h2>
-        <p class="response">Steak. Lobster. You and me. I’ll bring the appetite; we can pick the night together.</p>
+        <p class="response" id="yesResponse">Steak. Lobster. You and me. I’ll bring the appetite; we can pick the night together.</p>
         <div class="buttons">
           <button class="btn btn-primary" id="copyYesBtn" type="button">Copy my yes to send</button>
           <button class="btn" data-restart type="button">Start over</button>
@@ -218,7 +231,23 @@
     const card = document.getElementById('card');
     const status = document.getElementById('status');
     const confetti = document.getElementById('confetti');
+    const menuChoices = [...document.querySelectorAll('[data-menu]')];
     let noAttempts = 0;
+
+    menuChoices.forEach(choice => choice.addEventListener('click', () => {
+      choice.setAttribute('aria-pressed', choice.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
+    }));
+
+    function selectedMenu() {
+      return menuChoices.filter(choice => choice.getAttribute('aria-pressed') === 'true')
+        .map(choice => choice.dataset.menu);
+    }
+
+    function menuPhrase(items) {
+      if (items.length < 2) return items[0] || 'dinner';
+      if (items.length === 2) return `${items[0]} and ${items[1]}`;
+      return `${items.slice(0, -1).join(', ')}, and ${items.at(-1)}`;
+    }
 
     function moveNoButton() {
       const mobile = window.matchMedia('(max-width: 540px)').matches;
@@ -227,12 +256,12 @@
       const previousX = Number(noBtn.dataset.dodgeX || 0);
       const baseLeft = rect.left - previousX;
       const baseRight = rect.right - previousX;
-      const desiredX = mobile ? 0 : [-110, 75, -150][noAttempts - 1];
+      const desiredX = mobile ? 0 : [-210, 245, -185][noAttempts - 1];
       const x = Math.min(
         Math.max(desiredX, cardRect.left + 18 - baseLeft),
         cardRect.right - 18 - baseRight
       );
-      const y = mobile ? [36, 62, 22][noAttempts - 1] : 0;
+      const y = mobile ? [110, 155, 75][noAttempts - 1] : [115, 55, 145][noAttempts - 1];
       noBtn.style.translate = `${x}px ${y}px`;
       noBtn.dataset.dodgeX = x;
     }
@@ -258,6 +287,10 @@
     }
 
     document.getElementById('yesBtn').addEventListener('click', () => {
+      const choices = selectedMenu();
+      document.getElementById('yesResponse').textContent = choices.length
+        ? `${menuPhrase(choices)}. You and me. I’ll bring the appetite; we can pick the night together.`
+        : 'You and me. We can settle the menu together when we pick the night.';
       showOutcome(yesOutcome);
       celebrate();
     });
@@ -291,6 +324,7 @@
       noBtn.style.translate = '';
       delete noBtn.dataset.dodgeX;
       noBtn.parentElement.classList.remove('dodging');
+      menuChoices.forEach((choice, index) => choice.setAttribute('aria-pressed', index < 2 ? 'true' : 'false'));
       status.textContent = '';
       document.getElementById('yesNotice').textContent = 'Your answer stays on this page until you send it.';
       document.getElementById('noNotice').textContent = 'Your answer stays on this page until you send it.';
@@ -309,7 +343,7 @@
     }
 
     document.getElementById('copyYesBtn').addEventListener('click', () => copyReply(
-      'Yes! Steak and lobster dinner sounds amazing. Let’s pick a night. 🥩🦞',
+      `Yes! ${menuPhrase(selectedMenu())} sounds amazing. Let’s pick a night. 🥂`,
       document.getElementById('yesNotice')
     ));
     document.getElementById('copyNoBtn').addEventListener('click', () => copyReply(
