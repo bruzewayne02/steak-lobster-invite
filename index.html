@@ -110,7 +110,15 @@
     }
     .menu-item:hover { border-color: rgba(255, 228, 209, .48); }
     .menu-item[aria-pressed="true"] { border-color: var(--gold); background: rgba(247, 207, 133, .12); }
-    .menu-item[aria-pressed="true"]::after { content: "✓"; margin-left: auto; color: var(--gold); font-size: 20px; }
+    .menu-item[aria-pressed="true"]::after {
+      content: "";
+      width: 8px;
+      height: 14px;
+      margin: -4px 4px 0 auto;
+      border-right: 2px solid var(--gold);
+      border-bottom: 2px solid var(--gold);
+      transform: rotate(45deg);
+    }
     .emoji { flex: none; font-size: 31px; line-height: 1; }
     .menu-item strong { display: block; font-family: Georgia, serif; font-size: 20px; font-weight: 500; }
     .menu-item small { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; line-height: 1.35; }
@@ -342,10 +350,13 @@
       }
     }
 
-    document.getElementById('copyYesBtn').addEventListener('click', () => copyReply(
-      `Yes! ${menuPhrase(selectedMenu())} sounds amazing. Let’s pick a night. 🥂`,
-      document.getElementById('yesNotice')
-    ));
+    document.getElementById('copyYesBtn').addEventListener('click', () => {
+      const choices = selectedMenu();
+      copyReply(
+        `Yes! ${menuPhrase(choices)} ${choices.length > 1 ? 'sound' : 'sounds'} amazing. Let’s pick a night. 🥂`,
+        document.getElementById('yesNotice')
+      );
+    });
     document.getElementById('copyNoBtn').addEventListener('click', () => copyReply(
       'Thank you for the steak and lobster invitation, but I’ll pass. 🦞',
       document.getElementById('noNotice')
